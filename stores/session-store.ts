@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useSessionStore = defineStore('session', () => {
     const config = useRuntimeConfig();
+    const router = useRouter();
     const ENDPOINT = config.public.endpoint;
     const PREFIX = 'api';
     const accessToken = useCookie('access-token', {
@@ -74,9 +75,15 @@ export const useSessionStore = defineStore('session', () => {
         };
     }
 
+    const logOut = () => {
+        accessToken.value = '';
+        router.push('/start');
+    }
+
     return {
         accessToken,
         logIn,
-        register
+        register,
+        logOut
     }
 });

@@ -113,6 +113,8 @@
 </template>
 
 <script setup lang="ts">
+import { useSessionStore } from "~/stores/session-store";
+
 definePageMeta({
   layout: "",
 });
@@ -120,22 +122,26 @@ definePageMeta({
 const START = "start";
 const LOGIN = "login";
 const REGISTER = "register";
+
+const router = useRouter();
+const session = useSessionStore();
+
 const active = ref(START);
 const showPassword = ref(false);
 const nameRules = ref([
-  (value) => {
+  (value: string) => {
     if (value) return true;
 
     return "Is required.";
   },
 ]);
 const emailRules = ref([
-  (value) => {
+  (value: string) => {
     if (value) return true;
 
     return "Is required.";
   },
-  (value) => {
+  (value: string) => {
     if (/.+@.+\..+/.test(value)) return true;
 
     return "E-mail must be valid.";
@@ -166,11 +172,21 @@ const goBack = () => {
   };
 };
 
-const register = () => {
-  if (Object.values(registerData.value).filter((e) => e !== "")) return;
-  console.log(registerData.value);
+const register = async () => {
+  if (Object.values(registerData.value).filter((e) => e === "").length) return;
+  const result = await session.register(registerData.value);
+  console.log(result);
+  if (result.token) {
+    router.push("/");
+  }
 };
-const logIn = () => {
-  console.log(logInData.value);
+
+const logIn = async () => {
+  if (Object.values(logInData.value).filter((e) => e === "").length) return;
+  const result = await session.logIn(logInData.value);
+  console.log(result);
+  if (result.token) {
+    router.push("/");
+  }
 };
 </script>

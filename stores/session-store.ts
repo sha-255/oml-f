@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const ENDPOINT = '88.151.117.181:30001';
+export const ENDPOINT = 'http://88.151.117.181:30001';
 export const PREFIX = 'api';
 
 export const useSessionStore = defineStore('session', () => {
@@ -8,7 +8,8 @@ export const useSessionStore = defineStore('session', () => {
         default: () => ''
     });
 
-    const logIn = async (email: string, password: string) => {
+    const logIn = async (data: { email: string, password: string }) => {
+        const { email, password, } = data;
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         myHeaders.append("Content-Type", "application/json");
@@ -19,17 +20,28 @@ export const useSessionStore = defineStore('session', () => {
         });
 
         try {
-            return await $fetch(`${ENDPOINT}/${PREFIX}/login`, {
+            const result = await $fetch(`${ENDPOINT}/${PREFIX}/login`, {
                 method: 'POST',
                 headers: myHeaders,
                 body: raw
             });
+            if (result) {
+                if ('token' in result) {
+                    const dto = result as {
+                        token: string,
+                        "token_type": string
+                    }
+                    accessToken.value = dto.token;
+                    return dto;
+                }
+            }
         } catch (error) {
             console.error(error);
         };
     }
 
-    const register = async (name: string, surname: string, email: string, password: string) => {
+    const register = async (data: { name: string, surname: string, email: string, password: string }) => {
+        const { name, surname, email, password } = data;
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         myHeaders.append("Content-Type", "application/json");
@@ -42,11 +54,21 @@ export const useSessionStore = defineStore('session', () => {
         });
 
         try {
-            return await $fetch(`${ENDPOINT}/${PREFIX}/register`, {
+            const result = await $fetch(`${ENDPOINT}/${PREFIX}/register`, {
                 method: 'POST',
                 headers: myHeaders,
                 body: raw
             });
+            if (result) {
+                if ('token' in result) {
+                    const dto = result as {
+                        token: string,
+                        "token_type": string
+                    }
+                    accessToken.value = dto.token;
+                    return dto;
+                }
+            }
         } catch (error) {
             console.error(error);
         };

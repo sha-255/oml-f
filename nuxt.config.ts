@@ -1,5 +1,10 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  runtimeConfig: {
+    public: {
+      endpoint: process.env.ENDPOINT
+    }
+  },
   modules: [
     "@nuxt/image",
     "vuetify-nuxt-module",

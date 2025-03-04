@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 
-export const ENDPOINT = 'http://88.151.117.181:30001';
-export const PREFIX = 'api';
-
 export const useSessionStore = defineStore('session', () => {
+    const config = useRuntimeConfig();
+    const ENDPOINT = config.public.endpoint;
+    const PREFIX = 'api';
     const accessToken = useCookie('access-token', {
         default: () => ''
     });

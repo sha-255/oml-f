@@ -85,7 +85,10 @@
               label="password"
               required
               variant="outlined"
-              :rules="nameRules"
+              :type="showPassword ? 'text' : 'password'"
+              :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+              :rules="passwordRules"
+              @click:append-inner="showPassword = !showPassword"
               v-model="registerData.password"
             />
             <v-row>
@@ -107,6 +110,18 @@
             </v-row>
           </form>
         </v-card>
+        <v-dialog v-model="dialog" width="auto">
+          <v-card
+            max-width="400"
+            prepend-icon="mdi-alert"
+            text="Check the correctness of the filled-in data."
+            title="Verification"
+          >
+            <template v-slot:actions>
+              <v-btn class="ms-auto" text="Ok" @click="dialog = false"></v-btn>
+            </template>
+          </v-card>
+        </v-dialog>
       </v-container>
     </v-main>
   </v-app>
@@ -127,6 +142,7 @@ const router = useRouter();
 const session = useSessionStore();
 
 const active = ref(START);
+const dialog = ref(false);
 const showPassword = ref(false);
 const nameRules = ref([
   (value: string) => {
@@ -147,6 +163,18 @@ const emailRules = ref([
     return "E-mail must be valid.";
   },
 ]);
+const passwordRules = ref([
+  (value: string) => {
+    if (value) return true;
+
+    return "Is required.";
+  },
+  (value: string) => {
+    if (value.length > 6) return true;
+
+    return "Minimum of 6 characters.";
+  },
+]);
 const registerData = ref({
   name: "",
   surname: "",
@@ -160,6 +188,7 @@ const logInData = ref({
 
 const goBack = () => {
   active.value = START;
+  showPassword.value = false;
   registerData.value = {
     name: "",
     surname: "",
@@ -172,6 +201,22 @@ const goBack = () => {
   };
 };
 
+watch(dialog, (value: boolean) => {
+  if (value) {
+    showPassword.value = false;
+    registerData.value = {
+      name: "",
+      surname: "",
+      email: "",
+      password: "",
+    };
+    logInData.value = {
+      email: "",
+      password: "",
+    };
+  }
+});
+
 const register = async () => {
   if (Object.values(registerData.value).filter((e) => e === "").length) return;
   const result = await session.register(registerData.value);
@@ -182,11 +227,17 @@ const register = async () => {
 };
 
 const logIn = async () => {
-  if (Object.values(logInData.value).filter((e) => e === "").length) return;
-  const result = await session.logIn(logInData.value);
-  console.log(result);
-  if (result.token) {
-    router.push("/");
+  try {
+    if (Object.values(logInData.value).filter((e) => e === "").length) return;
+    const result = await session.logIn(logInData.value);
+    console.log(result);
+    if (result.token) {
+      router.push("/");
+      return;
+    }
+    dialog.value = true;
+  } catch {
+    dialog.value = true;
   }
 };
 </script>

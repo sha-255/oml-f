@@ -24,6 +24,7 @@ export const useSoftwareStore = defineStore('software', () => {
             }
             return result;
         } catch (error) {
+            session.logOut();
             console.error(error);
         };
     }
@@ -55,6 +56,7 @@ export const useSoftwareStore = defineStore('software', () => {
             }
             return result;
         } catch (error) {
+            session.logOut();
             console.error(error);
         };
     }
@@ -86,6 +88,7 @@ export const useSoftwareStore = defineStore('software', () => {
             }
             return result;
         } catch (error) {
+            session.logOut();
             console.error(error);
         };
     }
@@ -103,6 +106,7 @@ export const useSoftwareStore = defineStore('software', () => {
             console.log(result);
             return result;
         } catch (error) {
+            session.logOut();
             console.error(error);
         };
     }

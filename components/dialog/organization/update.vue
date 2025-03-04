@@ -105,7 +105,12 @@ const approve = async () => {
   ) {
     return;
   }
-  const result = await softwareStore.update(idComp.value, data.value);
+  const result = await softwareStore.update(idComp.value, {
+    name: data.value.name,
+    description: data.value.description,
+    vendor: data.value.vendor,
+    daysBeforeWarning: data.value.days_before_warning,
+  });
   console.log(result);
   softwareStore.data[index.value] = result;
   dialog.value = false;

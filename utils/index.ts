@@ -17,3 +17,7 @@ export const removeItemAll = (arr: any[], value: any) => {
     }
     return arr;
 }
+
+export const getId = (value: string): number => {
+    return Number.parseInt(value.replace(/.+\[/gm, "").replace(/]/gm, ""));
+};

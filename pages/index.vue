@@ -48,8 +48,4 @@
 <script setup lang="ts">
 const softwareStore = useSoftwareStore();
 const software = computed(() => softwareStore.data);
-
-onBeforeMount(async () => {
-  await softwareStore.getData();
-});
 </script>

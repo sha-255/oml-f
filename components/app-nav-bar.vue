@@ -37,12 +37,45 @@
         @click="() => router.push('/licenses')"
       ></v-list-item>
     </v-list>
+
+    <v-divider></v-divider>
+
+    <v-list>
+      <v-list-item
+        prepend-icon="mdi-cloud-refresh"
+        title="Sync"
+        slim
+        @click="sync"
+      >
+      </v-list-item>
+      <v-list-item
+        prepend-icon="mdi-microsoft-excel"
+        title="Excel load"
+        slim
+        @click="loadExcel"
+      >
+      </v-list-item>
+      <v-list-item
+        prepend-icon="mdi-earth"
+        :title="'Language: ' + currentLang"
+        slim
+        @click="changeLang"
+      >
+      </v-list-item>
+    </v-list>
   </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
 const drawer = ref(true);
 const rail = ref(false);
+const currentLang = ref("en");
 
 const router = useRouter();
+
+const sync = () => {};
+
+const loadExcel = () => {};
+
+const changeLang = () => {};
 </script>

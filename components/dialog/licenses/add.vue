@@ -26,8 +26,8 @@
             <v-select
               v-model="activeCompany"
               :items="softwareStore.data.map((el) => `${el?.name} [${el?.id}]`)"
-              :rules="[(v) => !!v || 'Company is required']"
-              label="Company*"
+              :rules="[(v) => !!v || 'Software is required']"
+              label="Software*"
               required
             ></v-select>
           </v-col>

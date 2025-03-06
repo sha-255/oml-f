@@ -23,7 +23,28 @@
               <div>
                 <div class="text-h6 mb-1">{{ entity?.key }}</div>
                 <div class="text-caption">
-                  {{ JSON.stringify(entity, null, 4) }}
+                  <div class="text-overline mb-1">
+                    Software: {{ entity?.software.name }} | Vendor
+                    {{ entity?.software.vendor }}
+
+                    {{ entity?.device.location }}
+                  </div>
+                  <div class="text-overline mb-1">
+                    Device: {{ entity?.device.name }} | Location:
+                    {{ entity?.device.location }} | Type
+                    {{ entity?.device.type }}
+                  </div>
+                  <div class="text-overline mb-1">
+                    License start date: {{ entity?.startDate }} | License
+                    expiration date:
+                    {{ entity?.endDate }}
+                  </div>
+                  <div class="text-overline mb-1">
+                    Status: {{ entity?.isActive ? "Active" : "Not active" }}
+                  </div>
+                  <div class="text-overline mb-1">
+                    Price: {{ entity?.cost }}₽
+                  </div>
                 </div>
               </div>
             </v-card-item>
